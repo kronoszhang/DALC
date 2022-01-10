@@ -1,0 +1,26 @@
+1. 代码来自https://github.com/aitorzip/PyTorch-SRGAN对论文Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network的复现。
+2. 代码运行说明：
+(1). 训练，模型在DIV2K数据集上训练，训练好的生成模型和鉴别模型保存在同路径checkpoints文件夹下。若需要重新训练模型，则请使用
+      如下命令：python train.py [--dataset DATASET_TYPE] [--dataroot YOUR_DATAROOT] 
+             [--workers WORKERS] [--batchSize BATCHSIZE] [--imageSize IMAGESIZE] 
+             [--upSampling UPSAMPLING] [--nEpochs NEPOCHS] [--generatorLR GENERATORLR]
+             [--discriminatorLR DISCRIMINATORLR] [--cuda] [--nGPU NGPU] [--out OUT]
+             [--generatorWeights GENERATORWEIGHTS] [--discriminatorWeights DISCRIMINATORWEIGHTS] 
+      如 python train.py --cuda
+(2). 您也可以直接使用测试文件对本次比赛的数据进行超分，首先请将本次测试集数据放到data路径下，路径格式为：
+      |- data
+            |--- A
+                 | -- people(1).jpg
+                 | -- ...          
+            |--- B
+                 | -- people(1).jpg
+                 | -- ...
+      然后使用python test_fall.py [--dataset DATASET] [--dataroot DATAROOT] [--workers WORKERS]
+            [--batchSize BATCHSIZE] [--imageSize IMAGESIZE]
+            [--upSampling UPSAMPLING] [--cuda] [--nGPU NGPU]
+            [--generatorWeights GENERATORWEIGHTS]
+            [--discriminatorWeights DISCRIMINATORWEIGHTS]
+      命令对测试集图像进行超分。如python test_fall.py --cuda
+      注： 测试集A图像相对于B整体比较小，而checkpoints下训练好的模型是4倍超分的结果，对于B测试集，部分较大的图像所需内存会较大，本人做法是对超内存的图像
+           手动剔除。此外A测试集部分图像也会发生该问题。
+(3). 获取到超分图像（默认保存在output路径下）后就可以进行摔倒检测，也可以直接用原始测试集进行检测，性能会略差。
